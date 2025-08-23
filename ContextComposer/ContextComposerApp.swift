@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import FoundationModels
 
 @main
 struct ContextComposerApp: App {
