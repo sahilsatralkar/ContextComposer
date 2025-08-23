@@ -41,12 +41,12 @@ After EVERY step:
 
 ### Phase 2: Project Structure
 
-- [ ] **Step 4: Create Folder Structure**
-  - [ ] Create Models/, Services/, Views/ groups in Xcode
-  - [ ] Move ContentView.swift to Views/
-  - [ ] **Compile Check**: Build & Run on iPhone 16 Simulator
-  - [ ] **Commit**: `"Organize project structure"`
-  - **Status**: ❌ Not Started
+- [x] **Step 4: Create Folder Structure**
+  - [x] Create Models/, Services/, Views/ groups in Xcode
+  - [x] Move ContentView.swift to Views/
+  - [x] **Compile Check**: Build & Run on iPhone 16 Simulator ✅ BUILD SUCCEEDED
+  - [x] **Commit**: `"Organize project structure"`
+  - **Status**: ✅ **COMPLETED**
 
 ### Phase 3: Data Models
 
