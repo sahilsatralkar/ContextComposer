@@ -13,6 +13,7 @@ struct ContentView: View {
     @State private var inputText = ""
     @State private var selectedTone = ToneType.formal
     @State private var selectedAudience = AudienceType.peer
+    @FocusState private var isInputFocused: Bool
     
     var body: some View {
         NavigationStack {
@@ -25,6 +26,7 @@ struct ContentView: View {
                         .frame(minHeight: 100)
                         .overlay(RoundedRectangle(cornerRadius: 8)
                             .stroke(Color.gray.opacity(0.3)))
+                        .focused($isInputFocused)
                     Text("\(inputText.count) characters")
                         .font(.caption)
                         .foregroundColor(.secondary)
@@ -56,6 +58,7 @@ struct ContentView: View {
                     Spacer()
                     
                     Button(action: {
+                        isInputFocused = false
                         Task {
                             let context = CommunicationContext(
                                 audience: selectedAudience,
@@ -87,6 +90,7 @@ struct ContentView: View {
                             .padding(.horizontal)
                     }
                 }
+                .scrollDismissesKeyboard(.interactively)
                 
                 Spacer()
             }
