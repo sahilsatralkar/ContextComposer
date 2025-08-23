@@ -10,7 +10,7 @@ Context Composer is an iOS 26+ productivity app that uses Apple's Foundation Mod
 - **Language**: Swift 6.0
 - **UI Framework**: SwiftUI with Liquid Glass design system
 - **AI Framework**: Foundation Models (iOS 26)
-- **Architecture**: MVVM pattern
+- **Architecture**: @Observable pattern with Swift 6 concurrency
 - **Minimum Hardware**: iPhone 15 Pro, iPad M1+ (Apple Intelligence required)
 - **Development**: Xcode 26 Beta 5+
 
@@ -18,9 +18,8 @@ Context Composer is an iOS 26+ productivity app that uses Apple's Foundation Mod
 ```swift
 import SwiftUI
 import FoundationModels  // Core AI framework - iOS 26 only
-import Combine
+import Observation       // For @Observable macro
 import Foundation
-import CoreData         // For local storage
 ```
 
 ### Key Framework Features to Use
@@ -30,24 +29,18 @@ import CoreData         // For local storage
 - **On-device processing**: Zero network calls for AI operations
 
 ## Project Structure
-Follow this exact MVVM structure:
+Follow this simplified single-screen structure:
 ```
 ContextComposer/
 ├── Models/
 │   ├── ResponseVariation.swift  (@Generable structs)
-│   ├── CommunicationContext.swift
-│   └── ToneAnalysis.swift
-├── ViewModels/
-│   ├── ComposerViewModel.swift
-│   └── ResponseGeneratorService.swift
-├── Views/
-│   ├── ContentView.swift
-│   ├── InputSection.swift
-│   ├── ResponseCard.swift
-│   └── ContextSelector.swift
+│   ├── ResponseTypes.swift      (ToneType, AudienceType)
+│   └── CommunicationContext.swift
 ├── Services/
-│   ├── FoundationModelService.swift
-│   └── StreamingHandler.swift
+│   └── AIService.swift          (@Observable service)
+├── Views/
+│   ├── ContentView.swift        (Single main screen)
+│   └── ResponseCard.swift
 └── Resources/
 ```
 
@@ -72,31 +65,39 @@ enum ToneType: String, CaseIterable {
 }
 ```
 
-### 2. Foundation Models Integration Pattern
+### 2. @Observable Service Pattern
 Always use this pattern for AI processing:
 ```swift
+@Observable
 @MainActor
-class FoundationModelService: ObservableObject {
-    private let model = FoundationModel.shared
+final class AIService {
+    var isProcessing = false
+    var responses: [ResponseVariation] = []
+    var errorMessage: String?
+    
+    private var model: FoundationModel?
     private var session: ModelSession?
     
-    func initializeSession() async throws {
-        session = try await model.createSession(
-            configuration: .init(
-                maxTokens: 4096,
+    func initializeModel() async {
+        do {
+            let config = FoundationModel.Configuration(
+                maxTokens: 2048,
                 temperature: 0.7,
-                topP: 0.9
+                topP: 0.9,
+                stream: true
             )
-        )
+            model = try await FoundationModel.load(
+                configuration: config,
+                hardwareAcceleration: .neural
+            )
+            session = try await model?.createSession()
+        } catch {
+            errorMessage = "Failed to initialize: \(error.localizedDescription)"
+        }
     }
     
-    func generateVariations(input: String, context: CommunicationContext) async throws -> [ResponseVariation] {
-        return try await model.generate(
-            prompt: constructPrompt(input, context),
-            schema: ResponseVariation.self,
-            streaming: true,
-            session: session
-        )
+    func generateResponse(input: String, context: CommunicationContext) async {
+        // Direct API calls with error handling via alerts
     }
 }
 ```
@@ -111,12 +112,13 @@ class FoundationModelService: ObservableObject {
   - Full response: < 3s
   - Memory usage: < 150MB
 
-### 4. UI/UX Guidelines
-- **Design System**: Use iOS 26 Liquid Glass materials
-- **Accessibility**: Full VoiceOver and Dynamic Type support
-- **Dark Mode**: Complete light/dark mode support
+### 4. Single-Screen MVP Guidelines
+- **Single Screen**: All functionality on ContentView (no navigation)
+- **Direct API Usage**: No mocks - show error alerts if APIs fail
+- **iPhone 16 Simulator**: Mandatory compilation check after each step
+- **Git Commits**: Required after each successful compilation
 - **Privacy Emphasis**: Prominent on-device processing indicators
-- **Response Cards**: Swipeable cards with tone indicators and copy actions
+- **Simple UI**: Input → Generate → Display → Copy workflow
 
 ## Testing Requirements
 
@@ -127,13 +129,13 @@ class FoundationModelService: ObservableObject {
 4. **Memory**: Monitor peak usage stays under 150MB
 5. **Performance**: Verify generation times meet targets
 
-### Test Commands
-Run these commands before any commits:
+### Compilation Protocol
+Required after every step:
 ```bash
-# No specific test commands defined yet - check for:
-# - xcodebuild test (if tests exist)
-# - Swift Package Manager tests
-# - Performance profiling with Instruments
+# 1. Build project: ⌘+B
+# 2. Run on iPhone 16 Simulator: ⌘+R
+# 3. Verify no compilation errors
+# 4. Git commit if successful: git add -A && git commit -m "step message"
 ```
 
 ## Development Phases
@@ -161,9 +163,9 @@ Run these commands before any commits:
 
 ### Development Constraints
 - **iOS 26 Beta Required**: Cannot build on older Xcode versions
-- **Physical Device Testing**: Foundation Models unavailable in Simulator
-- **Apple Intelligence**: Must be enabled in device settings
-- **Weekend Project**: Target 8-12 hours total development time
+- **iPhone 16 Simulator**: Use for compilation checks (APIs may show errors)
+- **Apple Intelligence**: Must be enabled in device settings for real testing
+- **Step-by-Step**: Follow implementation-plan.md exactly - 20 steps total
 
 ## Code Style Requirements
 - **No Comments**: Do not add code comments unless explicitly requested
@@ -180,7 +182,7 @@ Run these commands before any commits:
 - [ ] Verify structured output parsing works
 
 ## Resources
-- **Primary Doc**: Deep dive into Foundation Models - WWDC25
-- **Code Tutorial**: Bring on-device AI to your app - WWDC25
+- **Foundation Models API**: https://developer.apple.com/documentation/FoundationModels
+- **Implementation Plan**: implementation-plan.md (20 steps with tracking)
 - **Apple Intelligence**: https://www.apple.com/apple-intelligence/
 - **iOS 26 Beta**: Requires developer account access
