@@ -186,3 +186,4 @@ Required after every step:
 - **Implementation Plan**: implementation-plan.md (20 steps with tracking)
 - **Apple Intelligence**: https://www.apple.com/apple-intelligence/
 - **iOS 26 Beta**: Requires developer account access
+- Build with Xcode version 26.0 beta 6 17A5305f. Its available in Downloads folder. Always run on iOS 26.0 simulator for iPhone 16.
