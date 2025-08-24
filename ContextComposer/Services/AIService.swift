@@ -1,6 +1,9 @@
 import SwiftUI
 import Observation
 import FoundationModels
+#if targetEnvironment(simulator)
+import UIKit
+#endif
 
 @Observable
 @MainActor
@@ -27,11 +30,20 @@ final class AIService {
                 tools: [],
                 instructions: instructions
             )
-        case .unavailable(_):
-            errorMessage = "Foundation Models API not available on the Simulator because Apple Intelligence isn't available there. Please test on a physical device with Apple Intelligence enabled."
+        case .unavailable:
+            errorMessage = getErrorMessage(for: model!.availability)
         case .none:
-            errorMessage = "Foundation Models API not available on the Simulator because Apple Intelligence isn't available there. Please test on a physical device with Apple Intelligence enabled."
+            errorMessage = "Failed to initialize Foundation Models. Please ensure Apple Intelligence is enabled in Settings."
         }
+    }
+    
+    private func getErrorMessage(for availability: SystemLanguageModel.Availability) -> String {
+        #if targetEnvironment(simulator)
+        return "Foundation Models API is not available on the Simulator. Please test on a physical device with Apple Intelligence enabled."
+        #else
+        // The availability enum provides information about why the model is unavailable
+        return "Foundation Models unavailable. Please ensure Apple Intelligence is enabled in Settings > Apple Intelligence & Siri and that your device supports it (iPhone 15 Pro or later)."
+        #endif
     }
     
     private func constructPrompt(_ input: String, _ context: CommunicationContext) -> String {
@@ -51,7 +63,11 @@ final class AIService {
         responses = []
         
         guard let session = session else {
-            errorMessage = "Foundation Models API not available on the Simulator. Please test on a physical device with Apple Intelligence enabled."
+            #if targetEnvironment(simulator)
+            errorMessage = "Foundation Models API is not available on the Simulator. Please test on a physical device with Apple Intelligence enabled."
+            #else
+            errorMessage = "Session not initialized. Please ensure Apple Intelligence is enabled in Settings."
+            #endif
             isProcessing = false
             return
         }
@@ -75,7 +91,21 @@ final class AIService {
             
             responses = [responseVariation]
         } catch {
-            errorMessage = "Foundation Models API not available on the Simulator. Please test on a physical device with Apple Intelligence enabled."
+            #if targetEnvironment(simulator)
+            errorMessage = "Foundation Models API is not available on the Simulator. Please test on a physical device with Apple Intelligence enabled."
+            #else
+            // Check if it's a specific generation error
+            if let generationError = error as? LanguageModelSession.GenerationError {
+                switch generationError {
+                case .exceededContextWindowSize:
+                    errorMessage = "Input text is too long. Please shorten your message and try again."
+                default:
+                    errorMessage = "Failed to generate response: \(error.localizedDescription)"
+                }
+            } else {
+                errorMessage = "Failed to generate response. Please try again."
+            }
+            #endif
         }
         
         isProcessing = false
