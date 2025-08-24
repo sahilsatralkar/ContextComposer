@@ -11,7 +11,6 @@ Context Composer is a cutting-edge iOS app that leverages Apple's Foundation Mod
 - **🔒 100% On-Device Processing**: Your data never leaves your iPhone - complete privacy guaranteed
 - **⚡ Instant Generation**: Powered by Apple Intelligence for lightning-fast response variations
 - **🎯 Multiple Tones**: Choose from Formal, Casual, Empathetic, Direct, or Diplomatic tones
-- **👥 Audience Targeting**: Optimize messages for Executives, Peers, Clients, Teams, or Public
 - **📊 Smart Analysis**: Automatically preserves key points while adapting style
 - **✈️ Works Offline**: No internet connection required - perfect for airplane mode
 - **📱 Native iOS Experience**: Built with SwiftUI for seamless integration with iOS 26
@@ -66,28 +65,36 @@ Context Composer is a cutting-edge iOS app that leverages Apple's Foundation Mod
 
 1. **Launch the App**: Open Context Composer from your home screen
 2. **Enter Your Message**: Type or paste the text you want to transform
-3. **Select Context**:
-   - Choose your target **Audience** (Executive, Peer, Client, Team, Public)
-   - Select desired **Tone** (Formal, Casual, Empathetic, Direct, Diplomatic)
-4. **Generate Variations**: Tap the "Generate" button
-5. **Review & Use**: Browse generated variations, copy your favorite to clipboard
+3. **Select Tone**: Choose from Formal, Casual, Empathetic, Direct, or Diplomatic
+4. **Generate Response**: Tap the "Generate" button
+5. **Copy & Use**: Review the generated response and copy to clipboard
 
 ### Example Use Cases
 
-#### Professional Email to Executive
+#### Diplomatic Response
 - **Input**: "The project is delayed because of technical issues"
-- **Settings**: Audience: Executive, Tone: Diplomatic
+- **Tone**: Diplomatic
 - **Output**: "I wanted to update you on the project timeline. We've encountered some technical challenges that require additional attention. We're actively working on solutions and will provide a revised timeline by end of day."
 
-#### Team Update
+#### Empathetic Message
 - **Input**: "We need to work overtime this weekend to meet the deadline"
-- **Settings**: Audience: Team, Tone: Empathetic
+- **Tone**: Empathetic
 - **Output**: "I know this is short notice, and I appreciate everyone's dedication. We need some extra hours this weekend to ensure we deliver on time. Let's discuss how we can make this work for everyone and plan some well-deserved time off afterward."
 
-#### Client Communication
+#### Formal Communication
 - **Input**: "Your request cannot be completed as specified"
-- **Settings**: Audience: Client, Tone: Diplomatic
-- **Output**: "Thank you for your detailed requirements. After careful review, we've identified some aspects that would benefit from an alternative approach. I'd love to discuss options that could better achieve your goals while maintaining project feasibility."
+- **Tone**: Formal
+- **Output**: "We have carefully reviewed your requirements. Upon thorough analysis, we have identified certain specifications that present implementation challenges. We would appreciate the opportunity to discuss alternative approaches that could effectively achieve your objectives."
+
+#### Direct Response
+- **Input**: "The meeting needs to be rescheduled"
+- **Tone**: Direct
+- **Output**: "The meeting must be moved to a different time. Please let me know your availability for later this week."
+
+#### Casual Message
+- **Input**: "Thanks for helping with the presentation"
+- **Tone**: Casual
+- **Output**: "Hey, really appreciate you jumping in to help with the presentation! You saved the day."
 
 ## Technical Architecture
 
@@ -162,6 +169,9 @@ We welcome contributions! Please:
 
 ### Common Issues
 
+**"Foundation Models API not available on the Simulator"**
+- Solution: The app requires a physical device with Apple Intelligence. The iOS Simulator does not support Foundation Models API. Test on iPhone 15 Pro or later.
+
 **"Apple Intelligence not available"**
 - Solution: Go to Settings → Apple Intelligence & Siri → Enable Apple Intelligence
 
@@ -173,6 +183,9 @@ We welcome contributions! Please:
 
 **"App crashes on launch"**
 - Solution: Ensure you're running iOS 26+ on a compatible device
+
+**"Input text is too long"**
+- Solution: The model has a 4,096 token limit. Try shortening your input text.
 
 ## Support & Resources
 
@@ -197,8 +210,8 @@ This project is licensed under the MIT License - see the LICENSE file for detail
 
 ---
 
-**Version**: 1.0.0  
+**Version**: 1.1.0  
 **iOS Target**: 26.0+  
-**Last Updated**: August 2025
+**Last Updated**: December 2024
 
 Made with ❤️ for the privacy-conscious professional
