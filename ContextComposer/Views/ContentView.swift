@@ -12,7 +12,6 @@ struct ContentView: View {
     @State private var aiService = AIService()
     @State private var inputText = ""
     @State private var selectedTone = ToneType.formal
-    @State private var selectedAudience = AudienceType.peer
     @FocusState private var isInputFocused: Bool
     
     var body: some View {
@@ -32,22 +31,13 @@ struct ContentView: View {
                         .foregroundColor(.secondary)
                 }
                 
-                // Context Selectors
-                HStack(spacing: 16) {
-                    Picker("Tone", selection: $selectedTone) {
-                        ForEach(ToneType.allCases, id: \.self) { tone in
-                            Text(tone.rawValue).tag(tone)
-                        }
+                // Tone Selector
+                Picker("Tone", selection: $selectedTone) {
+                    ForEach(ToneType.allCases, id: \.self) { tone in
+                        Text(tone.rawValue).tag(tone)
                     }
-                    .pickerStyle(.menu)
-                    
-                    Picker("Audience", selection: $selectedAudience) {
-                        ForEach(AudienceType.allCases, id: \.self) { audience in
-                            Text(audience.rawValue).tag(audience)
-                        }
-                    }
-                    .pickerStyle(.menu)
                 }
+                .pickerStyle(.menu)
                 
                 // Generate Button with Privacy Badge
                 HStack {
@@ -61,7 +51,6 @@ struct ContentView: View {
                         isInputFocused = false
                         Task {
                             let context = CommunicationContext(
-                                audience: selectedAudience,
                                 tone: selectedTone
                             )
                             await aiService.generateResponse(

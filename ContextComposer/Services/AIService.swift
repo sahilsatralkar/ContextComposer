@@ -27,20 +27,19 @@ final class AIService {
                 tools: [],
                 instructions: instructions
             )
-        case .unavailable(let reason):
-            errorMessage = "Model unavailable: \(reason)"
+        case .unavailable(_):
+            errorMessage = "Foundation Models API not available on the Simulator because Apple Intelligence isn't available there. Please test on a physical device with Apple Intelligence enabled."
         case .none:
-            errorMessage = "Failed to initialize model"
+            errorMessage = "Foundation Models API not available on the Simulator because Apple Intelligence isn't available there. Please test on a physical device with Apple Intelligence enabled."
         }
     }
     
     private func constructPrompt(_ input: String, _ context: CommunicationContext) -> String {
         """
-        Generate a \(context.tone.rawValue) response for \(context.audience.rawValue) audience.
+        Generate a \(context.tone.rawValue) response.
         Original message: \(input)
         Requirements:
         - Match the tone: \(context.tone.rawValue)
-        - Appropriate for: \(context.audience.rawValue)
         - Preserve key information
         - Professional and clear
         """
@@ -52,7 +51,7 @@ final class AIService {
         responses = []
         
         guard let session = session else {
-            errorMessage = "Session not initialized"
+            errorMessage = "Foundation Models API not available on the Simulator. Please test on a physical device with Apple Intelligence enabled."
             isProcessing = false
             return
         }
@@ -69,7 +68,6 @@ final class AIService {
             // Create ResponseVariation with the generated text
             let responseVariation = ResponseVariation(
                 tone: context.tone,
-                audience: context.audience,
                 responseText: responseText,
                 formalityScore: 7,
                 wordCount: responseText.split(separator: " ").count
@@ -77,7 +75,7 @@ final class AIService {
             
             responses = [responseVariation]
         } catch {
-            errorMessage = "Generation failed: \(error.localizedDescription)"
+            errorMessage = "Foundation Models API not available on the Simulator. Please test on a physical device with Apple Intelligence enabled."
         }
         
         isProcessing = false
