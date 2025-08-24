@@ -1,7 +1,7 @@
 # Context Composer - Project Instructions
 
 ## Project Overview
-Context Composer is an iOS 26+ productivity app that uses Apple's Foundation Models framework for on-device AI text processing. It generates contextually appropriate response variations for different professional scenarios with complete privacy and no network dependency.
+Context Composer is an iOS 26+ productivity app that uses Apple's Foundation Models framework for on-device AI text processing. It transforms messages with different tones (formal, casual, empathetic, direct, diplomatic) while maintaining complete privacy and no network dependency.
 
 ## Technical Stack & Requirements
 
@@ -34,7 +34,7 @@ Follow this simplified single-screen structure:
 ContextComposer/
 ├── Models/
 │   ├── ResponseVariation.swift  (@Generable structs)
-│   ├── ResponseTypes.swift      (ToneType, AudienceType)
+│   ├── ResponseTypes.swift      (ToneType enum)
 │   └── CommunicationContext.swift
 ├── Services/
 │   └── AIService.swift          (@Observable service)
@@ -53,10 +53,9 @@ All AI-generated data structures MUST use the @Generable protocol:
 struct ResponseVariation {
     let id: UUID
     let tone: ToneType
-    let audience: AudienceType
     let responseText: String
     let formalityScore: Int
-    let keyPointsPreserved: [String]
+    let wordCount: Int
 }
 
 @Generable
@@ -97,6 +96,7 @@ final class AIService {
     }
     
     func generateResponse(input: String, context: CommunicationContext) async {
+        // Context now only contains tone selection
         // Direct API calls with error handling via alerts
     }
 }
@@ -118,7 +118,7 @@ final class AIService {
 - **iPhone 16 Simulator**: Mandatory compilation check after each step
 - **Git Commits**: Required after each successful compilation
 - **Privacy Emphasis**: Prominent on-device processing indicators
-- **Simple UI**: Input → Generate → Display → Copy workflow
+- **Simple UI**: Input → Select Tone → Generate → Display → Copy workflow
 
 ## Testing Requirements
 
@@ -148,7 +148,7 @@ Required after every step:
 
 ### Phase 2: Enhanced Features
 - Streaming response display
-- Multiple tone variations
+- Enhanced tone processing
 - Response history with CoreData
 - Basic preferences
 
