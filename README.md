@@ -2,6 +2,10 @@
 
 Transform your messages with AI-powered contextual variations - 100% on-device, 100% private.
 
+![Context Composer Screenshot](screenshot.png)
+
+📖 **Read the full story**: [Context Composer Showcase - Building Privacy-First AI with Apple's Foundation Models](https://sahilsatralkar.com/ios%20development/swiftui/ai%20technology/context-composer-showcase/)
+
 ## Overview
 
 Context Composer is a cutting-edge iOS app that leverages Apple's Foundation Models framework to generate contextually appropriate response variations for different professional scenarios. Built exclusively for iOS 26+, it provides instant, intelligent text transformations without any data leaving your device.
