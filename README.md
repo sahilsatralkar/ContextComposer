@@ -2,7 +2,7 @@
 
 Transform your messages with AI-powered contextual variations - 100% on-device, 100% private.
 
-![Context Composer Screenshot](screenshot.png)
+<img src="screenshot.png" alt="Context Composer Screenshot" width="50%">
 
 📖 **Read the full story**: [Context Composer Showcase - Building Privacy-First AI with Apple's Foundation Models](https://sahilsatralkar.com/ios%20development/swiftui/ai%20technology/context-composer-showcase/)
 
